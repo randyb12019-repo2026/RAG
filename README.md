@@ -21,7 +21,7 @@ Pregunta → Embeddings (embeddinggemma) → ChromaDB (búsqueda por similitud c
 | Lenguaje | Python 3.14 |
 | Notebook | Jupyter |
 | Embeddings | Ollama — `embeddinggemma:300m` |
-| Chat | Ollama — `gemma4:e2b` / `llama3:latest` |
+| Chat | Ollama — `gemma4:e2b` |
 | Vector DB | ChromaDB (persistente local) |
 | Chunking | Por párrafos y por tamaño fijo (300 chars) |
 
