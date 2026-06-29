@@ -16,7 +16,7 @@ services:
     volumes:
       - ./datos:/app/datos
       - ./chroma_lumetra:/app/chroma_lumetra
-      - ./clase_rag.ipynb:/app/clase_rag.ipynb
+      - ./notebooks:/app/notebooks
     environment:
       - OLLAMA_HOST=http://ollama:11434
     depends_on:

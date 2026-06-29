@@ -66,7 +66,7 @@ ollama pull gemma4:e2b
 ### Notebook (recomendado)
 
 ```bash
-jupyter notebook clase_rag.ipynb
+jupyter notebook notebooks\clase_rag.ipynb
 ```
 
 Ejecuta las celdas en orden. El pipeline completo:
@@ -145,7 +145,8 @@ RAG/
 ├── chroma_lumetra/              # Base de datos vectorial ChromaDB
 │   ├── chroma.sqlite3
 │   └── <uuid>/                  # Índice HNSW por colección
-├── clase_rag.ipynb              # Notebook principal
+├── notebooks/                   # Notebooks de Jupyter
+│   └── clase_rag.ipynb          # Notebook principal
 ├── Dockerfile                   # Imagen Docker para Jupyter
 ├── docker-compose.yml           # Orquestación Ollama + Jupyter
 ├── requirements.txt             # Dependencias del proyecto
