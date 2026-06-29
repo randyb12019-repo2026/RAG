@@ -2,7 +2,7 @@
 
 Sistema de **Retrieval-Augmented Generation (RAG)** que permite a un modelo de lenguaje local responder preguntas sobre documentación interna de una empresa, usando **Ollama** para embeddings + chat y **ChromaDB** como base de datos vectorial.
 
-**Autor:** Randy Bonucci Martín  
+**Autor:** Randy Bonucci  
 **BootCamp:** Data Analytics & IA — UpgradeHub  
 **Licencia:** MIT — ver [LICENSE](./LICENSE)
 
