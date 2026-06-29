@@ -45,10 +45,25 @@ python -m venv venv
 .\venv\Scripts\Activate   # Windows
 # source venv/bin/activate  # Linux/macOS
 
-pip install jupyter ollama chromadb numpy
+pip install -r requirements.txt
+```
+
+### Descargar modelos
+
+```powershell
+.\scripts\download_models.ps1   # Windows PowerShell
+```
+
+O manualmente:
+
+```bash
+ollama pull embeddinggemma:300m
+ollama pull gemma4:e2b
 ```
 
 ## Uso
+
+### Notebook (recomendado)
 
 ```bash
 jupyter notebook clase_rag.ipynb
@@ -60,11 +75,25 @@ Ejecuta las celdas en orden. El pipeline completo:
 3. Indexa en ChromaDB
 4. Responde preguntas usando RAG
 
-### Probar el asistente
+### Módulos Python (src/)
+
+Los módulos en `src/` pueden reutilizarse desde cualquier script:
 
 ```python
-rag("¿Qué días tengo que ir a la oficina obligatoriamente?")
-# → Los días presenciales obligatorios son martes y jueves [politica_teletrabajo.txt]
+from src.chunking import cargar_documentos, chunk_parrafos, indexar
+from src.rag import rag
+
+docs = cargar_documentos()
+chunks, metas = chunk_parrafos(docs)
+coleccion = indexar(chunks, metas)
+respuesta = rag("¿Qué días tengo que ir a la oficina?", coleccion)
+print(respuesta)
+```
+
+### Tests
+
+```bash
+python -m pytest tests/ -v
 ```
 
 ## Docker
