@@ -2,7 +2,7 @@ Write-Host "Descargando modelos de Ollama..." -ForegroundColor Cyan
 
 $models = @(
     "embeddinggemma:300m",
-    "gemma4:e2b"
+    "llama3:latest"
 )
 
 foreach ($model in $models) {
