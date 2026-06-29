@@ -127,29 +127,30 @@ Abrir `http://localhost:8888` en el navegador.
 
 ```
 RAG/
-├── src/                      # Módulos Python reutilizables
+├── src/                         # Módulos Python reutilizables
 │   ├── __init__.py
-│   ├── rag.py                # Funciones core: preguntar, embed, coseno, RAG
-│   └── chunking.py           # Estrategias de chunking (párrafos, tamaño fijo)
-├── scripts/                  # Scripts auxiliares
-│   └── download_models.ps1   # Descarga de modelos de Ollama
-├── tests/                    # Tests unitarios
+│   ├── rag.py                   # Funciones core: preguntar, embed, coseno, RAG
+│   └── chunking.py              # Estrategias de chunking (párrafos, tamaño fijo)
+├── scripts/                     # Scripts auxiliares
+│   └── download_models.ps1      # Descarga de modelos Ollama
+├── tests/                       # Tests unitarios
 │   ├── __init__.py
 │   └── test_rag.py
-├── clase_rag.ipynb           # Notebook principal
-├── datos/                    # Documentos de conocimiento
+├── datos/                       # Documentos de conocimiento
 │   ├── faq_soporte.txt
 │   ├── manual_producto.txt
 │   ├── onboarding.txt
 │   ├── politica_formacion.txt
 │   └── politica_teletrabajo.txt
-├── chroma_lumetra/           # Base de datos vectorial (ChromaDB)
-├── venv/                     # Entorno virtual
-├── Dockerfile                # Imagen Docker para Jupyter
-├── docker-compose.yml        # Orquestación Ollama + Jupyter
-├── requirements.txt          # Dependencias del proyecto
+├── chroma_lumetra/              # Base de datos vectorial ChromaDB
+│   ├── chroma.sqlite3
+│   └── <uuid>/                  # Índice HNSW por colección
+├── clase_rag.ipynb              # Notebook principal
+├── Dockerfile                   # Imagen Docker para Jupyter
+├── docker-compose.yml           # Orquestación Ollama + Jupyter
+├── requirements.txt             # Dependencias del proyecto
 ├── .gitignore
-├── LICENSE                   # Licencia MIT
+├── LICENSE                      # Licencia MIT
 └── README.md
 ```
 
