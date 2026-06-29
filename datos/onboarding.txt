@@ -1,0 +1,9 @@
+GUÍA DE ONBOARDING — NUEVAS INCORPORACIONES EN LUMETRA
+
+El primer día la incorporación es a las 9:30 en la oficina de Madrid, donde el equipo de People hace la recepción. Se entrega el portátil de empresa (a elegir entre Dell XPS y MacBook Air) y la tarjeta de acceso al edificio. La primera semana es presencial completa, independientemente del modelo híbrido.
+
+Cada nueva incorporación tiene asignado un buddy durante las primeras 6 semanas: una persona del equipo que resuelve las dudas del día a día y hace las presentaciones informales. El buddy no es el responsable directo y no participa en la evaluación.
+
+Las cuentas de correo, Slack y Atlas RRHH se activan el primer día. La firma de correo corporativa se configura automáticamente desde Atlas > Mi perfil. El acceso a los repositorios de código se solicita al responsable directo una vez completada la formación de seguridad.
+
+Durante la primera semana es obligatorio completar el curso de seguridad SecBase (4 horas, online) y la sesión de producto sobre Insight (2 horas). Sin el certificado de SecBase no se conceden accesos a datos de clientes ni a los entornos de producción.

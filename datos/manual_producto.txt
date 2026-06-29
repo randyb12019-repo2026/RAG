@@ -1,0 +1,9 @@
+MANUAL DEL PRODUCTO — LUMETRA INSIGHT
+
+Lumetra Insight es la plataforma de cuadros de mando (dashboards) de Lumetra. Se conecta a PostgreSQL, BigQuery y hojas de cálculo de Google, y refresca los datos automáticamente cada 15 minutos en todos los planes. Los dashboards se comparten por enlace o se incrustan en webs internas.
+
+Planes y precios: el plan Starter cuesta 49 euros al mes e incluye 5 usuarios y un máximo de 50 dashboards. El plan Pro cuesta 199 euros al mes e incluye 25 usuarios, dashboards ilimitados y acceso a la API. El plan Enterprise tiene precio a medida e incluye usuarios ilimitados, inicio de sesión único (SSO/SAML) y gestor de cuenta dedicado.
+
+El acuerdo de nivel de servicio (SLA) de los planes Pro y Enterprise garantiza una disponibilidad mensual del 99,9%. Si en un mes no se alcanza, Lumetra descuenta automáticamente el 10% de la factura del mes siguiente. El plan Starter no incluye SLA.
+
+La API REST solo está disponible en los planes Pro y Enterprise, con un límite de 1.000 llamadas por hora por organización. El token de acceso se genera desde Ajustes > Desarrolladores y caduca a los 90 días. Existe una librería oficial de Python llamada lumetra-sdk.

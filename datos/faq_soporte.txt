@@ -1,0 +1,9 @@
+PREGUNTAS FRECUENTES DE SOPORTE — LUMETRA INSIGHT
+
+El horario de soporte es de lunes a viernes de 8:00 a 20:00 (hora de Madrid). Los canales oficiales son el correo soporte@lumetra.es y el chat integrado dentro de Insight. Los tiempos de primera respuesta comprometidos son: incidencias críticas 2 horas (solo planes Pro y Enterprise) y resto de consultas 24 horas laborables.
+
+Para restablecer la contraseña hay que usar el enlace "¿Has olvidado tu contraseña?" de la pantalla de acceso. El correo de restablecimiento caduca a los 30 minutos. Si no llega, conviene revisar la carpeta de spam y, si sigue sin aparecer, escribir a soporte indicando el correo de la cuenta.
+
+Incidencia conocida: la exportación de dashboards a PDF falla en Safari 17. Mientras se publica el parche, previsto para la versión 4.8 de Insight, la alternativa recomendada es exportar desde Chrome o Edge. El fallo no afecta a la exportación a PNG ni a CSV.
+
+El estado del servicio en tiempo real se publica en status.lumetra.es, donde también es posible suscribirse por correo a los avisos de incidencias y a las ventanas de mantenimiento programado, que se anuncian con 72 horas de antelación.
