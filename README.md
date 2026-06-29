@@ -137,11 +137,11 @@ RAG/
 │   ├── __init__.py
 │   └── test_rag.py
 ├── datos/                       # Documentos de conocimiento
-│   ├── faq_soporte.txt
-│   ├── manual_producto.txt
-│   ├── onboarding.txt
-│   ├── politica_formacion.txt
-│   └── politica_teletrabajo.txt
+│   ├── faq_soporte.txt          # Preguntas frecuentes de soporte técnico
+│   ├── manual_producto.txt      # Manual del producto Lumetra Insight
+│   ├── onboarding.txt           # Guía de incorporación para nuevos empleados
+│   ├── politica_formacion.txt   # Política de formación y presupuesto anual
+│   └── politica_teletrabajo.txt # Política de teletrabajo y modelo híbrido
 ├── chroma_lumetra/              # Base de datos vectorial ChromaDB
 │   ├── chroma.sqlite3
 │   └── <uuid>/                  # Índice HNSW por colección
