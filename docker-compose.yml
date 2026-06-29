@@ -1,0 +1,27 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+
+  jupyter:
+    build: .
+    container_name: rag-notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./datos:/app/datos
+      - ./chroma_lumetra:/app/chroma_lumetra
+      - ./clase_rag.ipynb:/app/clase_rag.ipynb
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
