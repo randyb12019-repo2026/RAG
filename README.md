@@ -9,7 +9,7 @@ Pregunta → Embeddings (embeddinggemma) → ChromaDB (búsqueda por similitud c
                                               ↓
                                    Contexto recuperado (top-k chunks)
                                               ↓
-                              Modelo de chat (gemma4 / llama3) + prompt RAG
+                              Modelo de chat (gemma4) + prompt RAG
                                               ↓
                                          Respuesta
 ```
@@ -98,6 +98,16 @@ Abrir `http://localhost:8888` en el navegador.
 
 ```
 RAG/
+├── src/                      # Módulos Python reutilizables
+│   ├── __init__.py
+│   ├── rag.py                # Funciones core: preguntar, embed, coseno, RAG
+│   └── chunking.py           # Estrategias de chunking (párrafos, tamaño fijo)
+├── scripts/                  # Scripts auxiliares
+│   └── download_models.ps1   # Descarga de modelos de Ollama
+├── tests/                    # Tests unitarios
+│   ├── __init__.py
+│   └── test_rag.py
+├── clase_rag.ipynb           # Notebook principal
 ├── datos/                    # Documentos de conocimiento
 │   ├── faq_soporte.txt
 │   ├── manual_producto.txt
@@ -105,14 +115,15 @@ RAG/
 │   ├── politica_formacion.txt
 │   └── politica_teletrabajo.txt
 ├── chroma_lumetra/           # Base de datos vectorial (ChromaDB)
-├── clase_rag.ipynb           # Notebook principal
-├── venv/                     # Entorno virtual (ignorado por git)
-├── Dockerfile
-├── docker-compose.yml
-├── LICENSE
+├── venv/                     # Entorno virtual
+├── Dockerfile                # Imagen Docker para Jupyter
+├── docker-compose.yml        # Orquestación Ollama + Jupyter
+├── requirements.txt          # Dependencias del proyecto
+├── .gitignore
+├── LICENSE                   # Licencia MIT
 └── README.md
 ```
 
 ## Licencia
 
-Distribuido bajo licencia MIT. Ver `LICENSE`.
+Creado bajo licencia MIT. Ver `LICENSE`.
