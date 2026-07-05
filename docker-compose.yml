@@ -6,8 +6,3 @@ services:
     restart: on-failure
     environment:
       - OLLAMA_MODELS=/data/ollama/models
-    volumes:
-      - hf_data:/data
-
-volumes:
-  hf_data:

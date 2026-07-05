@@ -43,15 +43,30 @@ def esperar_ollama(max_intentos=10, espera=3):
     return False
 
 
+def descargar_si_falta(modelo):
+    try:
+        local = [m["name"] for m in ollama.list()["models"]]
+        if any(modelo in n for n in local):
+            return True
+    except Exception:
+        pass
+    with st.spinner(f"⬇️ Descargando {modelo}..."):
+        try:
+            ollama.pull(modelo)
+            return True
+        except Exception as e:
+            st.error(f"Error descargando {modelo}: {e}")
+            return False
+
+
 def init():
     if not esperar_ollama():
         st.error("No se pudo conectar con Ollama.")
         st.stop()
 
-    has_embed, has_chat = check_models()
-    if not has_embed or not has_chat:
-        faltan = [m for m, h in zip([MODELO_EMBED, MODELO_CHAT], [has_embed, has_chat]) if not h]
-        st.error(f"Modelos faltantes: {', '.join(faltan)}. Revisa los logs del Space.")
+    ok = all(descargar_si_falta(m) for m in [MODELO_EMBED, MODELO_CHAT])
+    if not ok:
+        st.error("No se pudieron descargar los modelos necesarios.")
         st.stop()
 
     db_path = str(BASE_DIR / "chroma_lumetra")
