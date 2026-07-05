@@ -1,9 +1,23 @@
+---
+title: RAG Lumetra
+emoji: 👁
+colorFrom: red
+colorTo: pink
+sdk: docker
+sdk_version: "1"
+app_file: app.py
+pinned: false
+license: mit
+short_description: Asistente RAG con Ollama + ChromaDB
+---
+
 # RAG — Asistente Virtual para Lumetra
 
 Sistema de **Retrieval-Augmented Generation (RAG)** que permite a un modelo de lenguaje local responder preguntas sobre documentación interna de una empresa, usando **Ollama** para embeddings + chat y **ChromaDB** como base de datos vectorial.
 
 **Autor:** Randy Bonucci  
 **BootCamp:** Data Analytics & IA — UpgradeHub  
+**Última actualización:** 25 de junio de 2025  
 **Licencia:** MIT — ver [LICENSE](./LICENSE)
 
 ## Arquitectura
@@ -23,7 +37,7 @@ Pregunta → Embeddings (embeddinggemma:300m) → ChromaDB (búsqueda coseno)
 | Componente | Tecnología |
 |---|---|
 | Lenguaje | Python 3.14 |
-| Notebook | Jupyter |
+| Interfaz | Streamlit + Jupyter |
 | Embeddings | Ollama — `embeddinggemma:300m` (dimensión 768) |
 | Chat | Ollama — `llama3:latest` |
 | Vector DB | ChromaDB (persistente local, similitud coseno) |
@@ -67,7 +81,15 @@ ollama pull llama3:latest
 
 ## Uso
 
-### Notebook (recomendado)
+### Web App (Streamlit) — recomendado
+
+```bash
+streamlit run app.py
+```
+
+Abre `http://localhost:8501`. Interfaz de chat lista para hacer preguntas.
+
+### Notebook
 
 ```bash
 jupyter notebook notebooks\clase_rag.ipynb
@@ -113,18 +135,44 @@ docker compose up -d
 
 Inicia dos contenedores:
 - **ollama**: servidor de modelos (puerto `11434`)
-- **jupyter**: Jupyter Notebook con el código montado (puerto `8888`)
+- **streamlit**: app web RAG con el código montado (puerto `8501`)
 
-### Descargar modelos dentro del contenedor
+La app descarga automáticamente los modelos de Ollama si no están presentes.
 
-```bash
-docker exec -it ollama ollama pull embeddinggemma:300m
-docker exec -it ollama ollama pull llama3:latest
-```
+### Acceder a la app
 
-### Acceder al notebook
+Abrir `http://localhost:8501`.
 
-Abrir `http://localhost:8888`.
+---
+
+## Deploy en Hugging Face Spaces
+
+La app está preparada para desplegarse en **[Hugging Face Spaces](https://huggingface.co/spaces)** con Docker Compose.
+
+### Pasos:
+
+1. **Crea un Space** en https://huggingface.co/new-space
+   - Name: `rag-lumetra` (o el que quieras)
+   - License: `MIT`
+   - Space SDK: **Docker**
+   - Docker Template: **Blank**
+
+2. **Sube el código** (el propio repo del proyecto):
+   ```bash
+   git remote add hf https://huggingface.co/spaces/TU_USUARIO/rag-lumetra
+   git push hf main
+   ```
+
+3. **Configura el Space** (Settings > Space):
+   - Hardware: al menos **2 vCPU · 16 GB RAM** (CPU basic es suficiente)
+   - Container Age: `1 day` (para que no se duerma entre visitas)
+
+4. **Primer arranque** (~10-15 min):
+   La app descarga automáticamente los modelos de Ollama (`embeddinggemma:300m` + `llama3:latest`) y luego indexa los documentos. No requiere acción manual.
+
+5. **¡Demo lista!** La app estará disponible en `https://TU_USUARIO-rag-lumetra.hf.space`
+
+> **Nota**: La primera vez que alguien haga una pregunta, la app indexará los documentos automáticamente. Puede tardar ~1 minuto.
 
 ## Estructura del proyecto
 
