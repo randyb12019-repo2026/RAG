@@ -1,4 +1,6 @@
 #!/bin/bash
+mkdir -p /data/ollama/models
+
 ollama serve &
 
 echo "Esperando a que Ollama esté listo..."
@@ -7,13 +9,19 @@ until ollama list > /dev/null 2>&1; do
 done
 echo "Ollama listo"
 
-echo "Descargando embeddinggemma:300m..."
-ollama pull embeddinggemma:300m
-echo "embeddinggemma:300m OK"
+pull_if_missing() {
+  local model=$1
+  if ollama list 2>/dev/null | grep -q "$model"; then
+    echo "$model ya descargado"
+  else
+    echo "Descargando $model..."
+    ollama pull "$model"
+    echo "$model OK"
+  fi
+}
 
-echo "Descargando qwen3:4b..."
-ollama pull qwen3:4b
-echo "qwen3:4b OK"
+pull_if_missing embeddinggemma:300m
+pull_if_missing qwen3:4b
 
 echo "Iniciando Streamlit..."
 streamlit run app.py --server.port=7860 --server.address=0.0.0.0

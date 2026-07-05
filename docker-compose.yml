@@ -4,3 +4,10 @@ services:
     ports:
       - "7860:7860"
     restart: on-failure
+    environment:
+      - OLLAMA_MODELS=/data/ollama/models
+    volumes:
+      - hf_data:/data
+
+volumes:
+  hf_data:
