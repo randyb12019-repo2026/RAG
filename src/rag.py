@@ -2,7 +2,7 @@ import numpy as np
 import ollama
 
 MODELO_EMBED = "embeddinggemma:300m"
-MODELO_CHAT = "llama3:latest"
+MODELO_CHAT = "qwen3:4b"
 SYSTEM_RAG = """Eres el asistente interno de Lumetra.
 Responde SOLO con la información del CONTEXTO.
 Si la respuesta no está en el contexto, di exactamente: "No encuentro esa información en la documentación".
