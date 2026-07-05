@@ -31,7 +31,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
-def esperar_ollama(max_intentos=30, espera=5):
+def esperar_ollama(max_intentos=10, espera=3):
     for intento in range(max_intentos):
         try:
             ollama.list()
@@ -43,24 +43,16 @@ def esperar_ollama(max_intentos=30, espera=5):
     return False
 
 
-def descargar_modelos():
-    for modelo in [MODELO_EMBED, MODELO_CHAT]:
-        with st.spinner(f"⬇️ Descargando {modelo} (primera vez, puede tardar varios minutos)..."):
-            try:
-                ollama.pull(modelo)
-            except Exception:
-                st.error(f"Error al descargar {modelo}")
-                st.stop()
-
-
 def init():
     if not esperar_ollama():
-        st.error("No se pudo conectar con Ollama. Asegúrate de que el contenedor esté corriendo.")
+        st.error("No se pudo conectar con Ollama.")
         st.stop()
 
     has_embed, has_chat = check_models()
     if not has_embed or not has_chat:
-        descargar_modelos()
+        faltan = [m for m, h in zip([MODELO_EMBED, MODELO_CHAT], [has_embed, has_chat]) if not h]
+        st.error(f"Modelos faltantes: {', '.join(faltan)}. Revisa los logs del Space.")
+        st.stop()
 
     db_path = str(BASE_DIR / "chroma_lumetra")
     cliente = chromadb.PersistentClient(path=db_path)
