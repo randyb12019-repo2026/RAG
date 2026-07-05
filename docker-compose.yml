@@ -3,8 +3,6 @@ services:
     image: ollama/ollama:latest
     ports:
       - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
     restart: on-failure
 
   streamlit:
@@ -17,6 +15,3 @@ services:
       ollama:
         condition: service_started
     restart: on-failure
-
-volumes:
-  ollama_data:
