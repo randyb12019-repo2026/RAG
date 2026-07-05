@@ -1,5 +1,6 @@
 import streamlit as st
 import sys
+import time
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
@@ -30,28 +31,36 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
-def check_models():
-    try:
-        models = ollama.list()
-        names = [m["name"] for m in models["models"]]
-        has_embed = any(MODELO_EMBED in n for n in names)
-        has_chat = any(MODELO_CHAT in n for n in names)
-        return has_embed, has_chat
-    except Exception:
-        return False, False
+def esperar_ollama(max_intentos=30, espera=5):
+    for intento in range(max_intentos):
+        try:
+            ollama.list()
+            return True
+        except Exception:
+            if intento == 0:
+                st.info("⏳ Esperando a que Ollama esté listo...")
+            time.sleep(espera)
+    return False
+
+
+def descargar_modelos():
+    for modelo in [MODELO_EMBED, MODELO_CHAT]:
+        with st.spinner(f"⬇️ Descargando {modelo} (primera vez, puede tardar varios minutos)..."):
+            try:
+                ollama.pull(modelo)
+            except Exception:
+                st.error(f"Error al descargar {modelo}")
+                st.stop()
 
 
 def init():
+    if not esperar_ollama():
+        st.error("No se pudo conectar con Ollama. Asegúrate de que el contenedor esté corriendo.")
+        st.stop()
+
     has_embed, has_chat = check_models()
     if not has_embed or not has_chat:
-        faltan = []
-        if not has_embed:
-            faltan.append(MODELO_EMBED)
-        if not has_chat:
-            faltan.append(MODELO_CHAT)
-        st.error(f"Modelos no encontrados en Ollama: {', '.join(faltan)}")
-        st.info("Ejecuta en la terminal:\n" + "\n".join(f"ollama pull {m}" for m in faltan))
-        st.stop()
+        descargar_modelos()
 
     db_path = str(BASE_DIR / "chroma_lumetra")
     cliente = chromadb.PersistentClient(path=db_path)
@@ -61,7 +70,7 @@ def init():
         if coleccion.count() == 0:
             raise ValueError("empty")
     except Exception:
-        with st.spinner("📚 Indexando documentos por primera vez..."):
+        with st.spinner("📚 Indexando documentos..."):
             docs = cargar_documentos(str(BASE_DIR / "datos"))
             chunks, metas = chunk_fijo_documentos(docs)
             coleccion = indexar(chunks, metas, ruta_db=db_path)
@@ -69,6 +78,17 @@ def init():
 
     st.session_state.collection = coleccion
     st.session_state.ready = True
+
+
+def check_models():
+    try:
+        models = ollama.list()
+        names = [m["name"] for m in models["models"]]
+        has_embed = any(MODELO_EMBED in n for n in names)
+        has_chat = any(MODELO_CHAT in n for n in names)
+        return has_embed, has_chat
+    except Exception:
+        return False, False
 
 
 def responder(prompt):
