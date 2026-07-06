@@ -1,8 +1,10 @@
+import time
 from pathlib import Path
 
 import chromadb
+import ollama
 
-from src.rag import embed_consulta, embed_documentos
+from src.rag import embed_consulta, MODELO_EMBED
 
 
 def cargar_documentos(ruta="datos"):
@@ -44,21 +46,31 @@ def chunk_fijo_documentos(docs, tamano=300, solapamiento=50, min_caracteres=40):
     return chunks, metadatos
 
 
+def _embed_uno(texto, cliente_ollama, reintentos=3):
+    for intento in range(reintentos):
+        try:
+            entrada = f"title: none | text: {texto}"
+            return cliente_ollama.embed(model=MODELO_EMBED, input=[entrada])["embeddings"][0]
+        except Exception as e:
+            if intento == reintentos - 1:
+                raise
+            time.sleep(2)
+
+
 def indexar(chunks, metadatos, nombre_coleccion="lumetras", ruta_db="chroma_lumetra", progress_callback=None):
     cliente = chromadb.PersistentClient(path=ruta_db)
     coleccion = cliente.get_or_create_collection(
         nombre_coleccion, metadata={"hnsw:space": "cosine"}
     )
 
-    TAMANO_LOTE = 20
+    cliente_ollama = ollama.Client(timeout=120)
     todos_embeddings = []
     total = len(chunks)
-    for i in range(0, total, TAMANO_LOTE):
-        lote = chunks[i : i + TAMANO_LOTE]
-        embs = embed_documentos(lote)
-        todos_embeddings.extend(embs)
+    for i, chunk in enumerate(chunks):
+        embs = _embed_uno(chunk, cliente_ollama)
+        todos_embeddings.append(embs)
         if progress_callback:
-            progress_callback(min(i + TAMANO_LOTE, total), total)
+            progress_callback(i + 1, total)
 
     coleccion.upsert(
         ids=[f"chunk_{i}" for i in range(total)],

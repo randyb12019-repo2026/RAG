@@ -31,7 +31,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
-def esperar_ollama(max_intentos=10, espera=3):
+def esperar_ollama(max_intentos=20, espera=3):
     for intento in range(max_intentos):
         try:
             ollama.list()
@@ -77,8 +77,6 @@ def init():
         if coleccion.count() == 0:
             raise ValueError("empty")
     except Exception:
-        with st.spinner("🔄 Cargando modelo de embeddings..."):
-            ollama.embed(model=MODELO_EMBED, input=["warmup"])
         docs = cargar_documentos(str(BASE_DIR / "datos"))
         chunks, metas = chunk_fijo_documentos(docs)
         barra = st.progress(0, text="📚 Indexando documentos...")
