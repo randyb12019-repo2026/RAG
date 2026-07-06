@@ -17,8 +17,20 @@ Sistema de **Retrieval-Augmented Generation (RAG)** que permite a un modelo de l
 
 **Autor:** Randy Bonucci  
 **BootCamp:** Data Analytics & IA — UpgradeHub  
-**Última actualización:** 25 de junio de 2025  
 **Licencia:** MIT — ver [LICENSE](./LICENSE)
+
+---
+
+## Stack
+
+| Componente | Tecnología |
+|---|---|
+| Lenguaje | Python 3.14 |
+| Interfaz | Streamlit + Jupyter |
+| Embeddings | Ollama — `embeddinggemma:300m` (dimensión 768) |
+| Chat | Ollama — `llama3:latest` |
+| Vector DB | ChromaDB (persistente local, similitud coseno) |
+| Chunking | Por párrafos y por tamaño fijo (300 chars, solapamiento 50) |
 
 ## Arquitectura
 
@@ -32,31 +44,23 @@ Pregunta → Embeddings (embeddinggemma:300m) → ChromaDB (búsqueda coseno)
                                                 Respuesta
 ```
 
-## Stack
+## Instalación
 
-| Componente | Tecnología |
-|---|---|
-| Lenguaje | Python 3.14 |
-| Interfaz | Streamlit + Jupyter |
-| Embeddings | Ollama — `embeddinggemma:300m` (dimensión 768) |
-| Chat | Ollama — `llama3:latest` |
-| Vector DB | ChromaDB (persistente local, similitud coseno) |
-| Chunking | Por párrafos y por tamaño fijo (300 chars, solapamiento 50) |
+### Requisitos
 
-## Requisitos
-
+- Python 3.14+
 - [Ollama](https://ollama.com) instalado y corriendo
 - Modelos descargados:
-  ```bash
-  ollama pull embeddinggemma:300m
-  ollama pull llama3:latest
-  ```
-- Python 3.14+ con `pip`
-
-## Instalación local
 
 ```bash
-git clone <repo-url>
+ollama pull embeddinggemma:300m
+ollama pull llama3:latest
+```
+
+### Setup
+
+```bash
+git clone https://github.com/randyb12019-repo2026/RAG.git
 cd RAG
 
 python -m venv venv
@@ -66,28 +70,15 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-### Descargar modelos
-
-```powershell
-.\scripts\download_models.ps1   # Windows PowerShell
-```
-
-O manualmente:
-
-```bash
-ollama pull embeddinggemma:300m
-ollama pull llama3:latest
-```
-
 ## Uso
 
-### Web App (Streamlit) — recomendado
+### Web App (Streamlit)
 
 ```bash
 streamlit run app.py
 ```
 
-Abre `http://localhost:8501`. Interfaz de chat lista para hacer preguntas.
+Abre `http://localhost:8501`. La app descarga automáticamente los modelos de Ollama si no están presentes e indexa los documentos en el primer arranque.
 
 ### Notebook
 
@@ -95,17 +86,17 @@ Abre `http://localhost:8501`. Interfaz de chat lista para hacer preguntas.
 jupyter notebook notebooks\clase_rag.ipynb
 ```
 
-Ejecuta las celdas en orden. El pipeline completo:
+Ejecuta las celdas en orden para ver el pipeline completo:
 1. Verifica modelos instalados en Ollama
 2. Prueba de chat básico
 3. Exploración de embeddings (similitud coseno)
 4. Carga los documentos `.txt` de `datos/`
 5. Trocea en chunks (párrafos y tamaño fijo)
 6. Indexa en ChromaDB
-7. Recupera contexto (`recuperar`)
+7. Recupera contexto
 8. Responde preguntas usando RAG con citas de fuente
 
-### Módulos Python (src/)
+### Módulos Python
 
 ```python
 from src.chunking import cargar_documentos, chunk_parrafos, indexar
@@ -119,24 +110,6 @@ print(respuesta)
 # → "Los días presenciales obligatorios son martes y jueves [politica_teletrabajo.txt]"
 ```
 
-### Tests
-
-```bash
-python -m pytest tests/ -v
-```
-
-5 tests: carga, chunking por párrafos, chunking fijo, coseno, dimensión de embedding (768).
-
-### Generar GIF demo
-
-```powershell
-pip install -r requirements-demo.txt
-playwright install chromium
-python capturar_gif.py
-```
-
-Genera un GIF animado (`_demo/demo_rag.gif`) que recorre toda la app: carga, 5 preguntas de ejemplo + 1 escrita manualmente. Requiere tener **Ollama corriendo** con los modelos descargados.
-
 ## Docker
 
 ```bash
@@ -147,42 +120,27 @@ Inicia dos contenedores:
 - **ollama**: servidor de modelos (puerto `11434`)
 - **streamlit**: app web RAG con el código montado (puerto `8501`)
 
-La app descarga automáticamente los modelos de Ollama si no están presentes.
+Acceder en `http://localhost:8501`.
 
-### Acceder a la app
+## Tests
 
-Abrir `http://localhost:8501`.
+```bash
+python -m pytest tests/ -v
+```
 
----
+5 tests: carga de documentos, chunking por párrafos, chunking por tamaño fijo, similitud coseno, dimensión de embedding (768).
 
-## Deploy en Hugging Face Spaces
+## Demo GIF
 
-La app está preparada para desplegarse en **[Hugging Face Spaces](https://huggingface.co/spaces)** con Docker Compose.
+Genera una animación que recorre la app mostrando las 5 preguntas de ejemplo y una consulta escrita manualmente:
 
-### Pasos:
+```powershell
+pip install -r requirements-demo.txt
+playwright install chromium
+python capturar_gif.py
+```
 
-1. **Crea un Space** en https://huggingface.co/new-space
-   - Name: `rag-lumetra` (o el que quieras)
-   - License: `MIT`
-   - Space SDK: **Docker**
-   - Docker Template: **Blank**
-
-2. **Sube el código** (el propio repo del proyecto):
-   ```bash
-   git remote add hf https://huggingface.co/spaces/TU_USUARIO/rag-lumetra
-   git push hf main
-   ```
-
-3. **Configura el Space** (Settings > Space):
-   - Hardware: al menos **2 vCPU · 16 GB RAM** (CPU basic es suficiente)
-   - Container Age: `1 day` (para que no se duerma entre visitas)
-
-4. **Primer arranque** (~10-15 min):
-   La app descarga automáticamente los modelos de Ollama (`embeddinggemma:300m` + `llama3:latest`) y luego indexa los documentos. No requiere acción manual.
-
-5. **¡Demo lista!** La app estará disponible en `https://TU_USUARIO-rag-lumetra.hf.space`
-
-> **Nota**: La primera vez que alguien haga una pregunta, la app indexará los documentos automáticamente. Puede tardar ~1 minuto.
+El GIF se genera en `_demo/demo_rag.gif`. Requiere **Ollama corriendo** con los modelos descargados.
 
 ## Estructura del proyecto
 
@@ -203,25 +161,25 @@ RAG/
 │   ├── onboarding.txt
 │   ├── politica_formacion.txt
 │   └── politica_teletrabajo.txt
-├── chroma_lumetra/              # ChromaDB persistente
 ├── notebooks/
 │   └── clase_rag.ipynb          # Notebook principal del pipeline
 ├── _demo/                       # GIF demo generado
 │   └── demo_rag.gif
 ├── capturar_gif.py              # Script para generar GIF demo
 ├── requirements-demo.txt        # Dependencias para generar el GIF demo
+├── chroma_lumetra/              # ChromaDB persistente
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .gitignore
-├── LICENSE                      # MIT
+├── LICENSE
 └── README.md
 ```
 
 ## Notas
 
 - El modelo `gemma4:e2b` fue reemplazado por `llama3:latest` por un error interno de carga de CLIP en Ollama para Windows.
-- Todas las consultas sin respuesta en los documentos retornan: `"No encuentro esa información en la documentación"`.
+- Consultas sin respuesta en los documentos retornan: `"No encuentro esa información en la documentación"`.
 - Los embeddings usan prefijos específicos (`title: none | text:` para documentos, `task: search result | query:` para consultas).
 
 ## Licencia
