@@ -69,7 +69,7 @@ def init():
         st.error("No se pudieron descargar los modelos necesarios.")
         st.stop()
 
-    db_path = str(BASE_DIR / "chroma_lumetra")
+    db_path = "/data/chroma_lumetra"
     cliente = chromadb.PersistentClient(path=db_path)
 
     try:
@@ -77,10 +77,16 @@ def init():
         if coleccion.count() == 0:
             raise ValueError("empty")
     except Exception:
-        with st.spinner("📚 Indexando documentos..."):
-            docs = cargar_documentos(str(BASE_DIR / "datos"))
-            chunks, metas = chunk_fijo_documentos(docs)
-            coleccion = indexar(chunks, metas, ruta_db=db_path)
+        with st.spinner("🔄 Cargando modelo de embeddings..."):
+            ollama.embed(model=MODELO_EMBED, input=["warmup"])
+        docs = cargar_documentos(str(BASE_DIR / "datos"))
+        chunks, metas = chunk_fijo_documentos(docs)
+        barra = st.progress(0, text="📚 Indexando documentos...")
+        coleccion = indexar(
+            chunks, metas, ruta_db=db_path,
+            progress_callback=lambda a, t: barra.progress(a / t, text=f"📚 Indexando {a}/{t} chunks...")
+        )
+        barra.empty()
         st.success(f"✅ {len(chunks)} chunks indexados")
 
     st.session_state.collection = coleccion

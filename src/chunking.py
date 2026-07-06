@@ -44,15 +44,26 @@ def chunk_fijo_documentos(docs, tamano=300, solapamiento=50, min_caracteres=40):
     return chunks, metadatos
 
 
-def indexar(chunks, metadatos, nombre_coleccion="lumetras", ruta_db="chroma_lumetra"):
+def indexar(chunks, metadatos, nombre_coleccion="lumetras", ruta_db="chroma_lumetra", progress_callback=None):
     cliente = chromadb.PersistentClient(path=ruta_db)
     coleccion = cliente.get_or_create_collection(
         nombre_coleccion, metadata={"hnsw:space": "cosine"}
     )
+
+    TAMANO_LOTE = 20
+    todos_embeddings = []
+    total = len(chunks)
+    for i in range(0, total, TAMANO_LOTE):
+        lote = chunks[i : i + TAMANO_LOTE]
+        embs = embed_documentos(lote)
+        todos_embeddings.extend(embs)
+        if progress_callback:
+            progress_callback(min(i + TAMANO_LOTE, total), total)
+
     coleccion.upsert(
-        ids=[f"chunk_{i}" for i in range(len(chunks))],
+        ids=[f"chunk_{i}" for i in range(total)],
         documents=chunks,
-        embeddings=embed_documentos(chunks),
+        embeddings=todos_embeddings,
         metadatas=metadatos,
     )
     return coleccion
