@@ -127,6 +127,16 @@ python -m pytest tests/ -v
 
 5 tests: carga, chunking por párrafos, chunking fijo, coseno, dimensión de embedding (768).
 
+### Generar GIF demo
+
+```powershell
+pip install -r requirements-demo.txt
+playwright install chromium
+python capturar_gif.py
+```
+
+Genera un GIF animado (`_demo/demo_rag.gif`) que recorre toda la app: carga, 5 preguntas de ejemplo + 1 escrita manualmente. Requiere tener **Ollama corriendo** con los modelos descargados.
+
 ## Docker
 
 ```bash
@@ -196,6 +206,10 @@ RAG/
 ├── chroma_lumetra/              # ChromaDB persistente
 ├── notebooks/
 │   └── clase_rag.ipynb          # Notebook principal del pipeline
+├── _demo/                       # GIF demo generado
+│   └── demo_rag.gif
+├── capturar_gif.py              # Script para generar GIF demo
+├── requirements-demo.txt        # Dependencias para generar el GIF demo
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
