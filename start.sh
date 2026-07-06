@@ -21,7 +21,7 @@ pull_if_missing() {
 }
 
 pull_if_missing embeddinggemma:300m
-pull_if_missing qwen3:4b
+pull_if_missing qwen2.5:1.5b
 
 echo "Iniciando Streamlit..."
 streamlit run app.py --server.port=7860 --server.address=0.0.0.0
