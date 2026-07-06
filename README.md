@@ -1,23 +1,16 @@
----
-title: RAG Lumetra
-emoji: 👁
-colorFrom: red
-colorTo: pink
-sdk: docker
-sdk_version: "1"
-app_file: app.py
-pinned: false
-license: mit
-short_description: Asistente RAG con Ollama + ChromaDB
----
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Ollama](https://img.shields.io/badge/Ollama-000?logo=ollama&logoColor=white)](https://ollama.com)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-FF6B35?logo=chromadb&logoColor=white)](https://chromadb.com)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://docker.com)
+[![MIT](https://img.shields.io/badge/Licencia-MIT-green)](./LICENSE)
 
 # RAG — Asistente Virtual para Lumetra
 
 Sistema de **Retrieval-Augmented Generation (RAG)** que permite a un modelo de lenguaje local responder preguntas sobre documentación interna de una empresa, usando **Ollama** para embeddings + chat y **ChromaDB** como base de datos vectorial.
 
-**Autor:** Randy Bonucci  
-**BootCamp:** Data Analytics & IA — UpgradeHub  
-**Licencia:** MIT — ver [LICENSE](./LICENSE)
+**Autor:** [Randy Bonucci](https://github.com/randyb12019-repo2026) · Data Analytics & IA — UpgradeHub  
+**Demo:** [`_demo/demo_rag.gif`](./_demo/demo_rag.gif) — GIF animado del funcionamiento de la app
 
 ---
 
