@@ -110,18 +110,6 @@ print(respuesta)
 # → "Los días presenciales obligatorios son martes y jueves [politica_teletrabajo.txt]"
 ```
 
-## Docker
-
-```bash
-docker compose up -d
-```
-
-Inicia dos contenedores:
-- **ollama**: servidor de modelos (puerto `11434`)
-- **streamlit**: app web RAG con el código montado (puerto `8501`)
-
-Acceder en `http://localhost:8501`.
-
 ## Tests
 
 ```bash
@@ -129,6 +117,28 @@ python -m pytest tests/ -v
 ```
 
 5 tests: carga de documentos, chunking por párrafos, chunking por tamaño fijo, similitud coseno, dimensión de embedding (768).
+
+## Despliegue
+
+### Docker (local)
+
+```bash
+docker compose up -d
+```
+
+### Hugging Face Spaces
+
+El proyecto está preparado para desplegarse en [Hugging Face Spaces](https://huggingface.co/spaces) con Docker Compose.
+
+**Hardware recomendado:**
+
+| Recurso | Mínimo | Recomendado |
+|---|---|---|
+| vCPU | 2 | 4+ |
+| RAM | 8 GB | 16 GB |
+| Disco | 10 GB | 20 GB |
+
+> El primer arranque descarga los modelos de Ollama (`embeddinggemma:300m` + `llama3:latest`) e indexa los documentos automáticamente. Puede tardar ~10-15 min.
 
 ## Demo GIF
 
