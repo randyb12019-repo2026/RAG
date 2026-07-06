@@ -21,7 +21,7 @@ Sistema de **Retrieval-Augmented Generation (RAG)** que permite a un modelo de l
 | Lenguaje | Python 3.14 |
 | Interfaz | Streamlit + Jupyter |
 | Embeddings | Ollama — `embeddinggemma:300m` (dimensión 768) |
-| Chat | Ollama — `llama3:latest` |
+| Chat | Ollama — `gemma3:1b` |
 | Vector DB | ChromaDB (persistente local, similitud coseno) |
 | Chunking | Por párrafos y por tamaño fijo (300 chars, solapamiento 50) |
 
@@ -32,7 +32,7 @@ Pregunta → Embeddings (embeddinggemma:300m) → ChromaDB (búsqueda coseno)
                                                     ↓
                                           Contexto recuperado (top-k chunks)
                                                     ↓
-                                        Modelo de chat (llama3) + prompt RAG
+                                        Modelo de chat (gemma3:1b) + prompt RAG
                                                     ↓
                                                 Respuesta
 ```
@@ -47,7 +47,7 @@ Pregunta → Embeddings (embeddinggemma:300m) → ChromaDB (búsqueda coseno)
 
 ```bash
 ollama pull embeddinggemma:300m
-ollama pull llama3:latest
+ollama pull gemma3:1b
 ```
 
 ### Setup
@@ -131,7 +131,7 @@ El proyecto está preparado para desplegarse en [Hugging Face Spaces](https://hu
 | RAM | 8 GB | 16 GB |
 | Disco | 10 GB | 20 GB |
 
-> El primer arranque descarga los modelos de Ollama (`embeddinggemma:300m` + `llama3:latest`) e indexa los documentos automáticamente. Puede tardar ~10-15 min.
+> El primer arranque descarga los modelos de Ollama (`embeddinggemma:300m` + `gemma3:1b`) e indexa los documentos automáticamente. Puede tardar ~10-15 min.
 
 ## Demo GIF
 
@@ -181,7 +181,7 @@ RAG/
 
 ## Notas
 
-- El modelo `gemma4:e2b` fue reemplazado por `llama3:latest` por un error interno de carga de CLIP en Ollama para Windows.
+- El modelo de chat usado es `gemma3:1b` (Google), ligero y rápido para entornos sin GPU.
 - Consultas sin respuesta en los documentos retornan: `"No encuentro esa información en la documentación"`.
 - Los embeddings usan prefijos específicos (`title: none | text:` para documentos, `task: search result | query:` para consultas).
 
