@@ -21,6 +21,18 @@ def preguntar(prompt, system=None):
     return r["message"]["content"].strip()
 
 
+def preguntar_stream(prompt, system=None):
+    mensajes = []
+    if system:
+        mensajes.append({"role": "system", "content": system})
+    mensajes.append({"role": "user", "content": prompt})
+    opciones = {"temperature": 0}
+    if "qwen" in MODELO_CHAT:
+        opciones["think"] = False
+    for fragmento in ollama.chat(model=MODELO_CHAT, messages=mensajes, options=opciones, stream=True):
+        yield fragmento["message"]["content"]
+
+
 def embed_documentos(textos):
     entrada = [f"title: none | text: {t}" for t in textos]
     return ollama.embed(model=MODELO_EMBED, input=entrada)["embeddings"]
@@ -45,3 +57,11 @@ def rag(pregunta, coleccion, k=4, ver_contexto=False):
         print("-" * 60, f"\n CONTEXTO RECUPERADO: \n\n{contexto}\n", "-" * 60)
     prompt = f"CONTEXTO:\n{contexto}\n\nPREGUNTA: {pregunta}"
     return preguntar(prompt, system=SYSTEM_RAG)
+
+
+def rag_stream(pregunta, coleccion, k=4):
+    from src.chunking import recuperar
+    trozos = recuperar(pregunta, coleccion, k)
+    contexto = "\n\n".join([f"[{fuente}]: {texto}" for texto, fuente in trozos])
+    prompt = f"CONTEXTO:\n{contexto}\n\nPREGUNTA: {pregunta}"
+    yield from preguntar_stream(prompt, system=SYSTEM_RAG)

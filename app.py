@@ -8,7 +8,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 st.set_page_config(page_title="RAG - Asistente Lumetra", page_icon="🤖", layout="centered")
 
-from src.rag import rag, MODELO_EMBED, MODELO_CHAT
+from src.rag import rag_stream, MODELO_EMBED, MODELO_CHAT
 from src.chunking import cargar_documentos, chunk_fijo_documentos, indexar
 import chromadb
 import ollama
@@ -103,7 +103,7 @@ def check_models():
 
 
 def responder(prompt):
-    return rag(prompt, st.session_state.collection)
+    return rag_stream(prompt, st.session_state.collection)
 
 
 with st.sidebar:
@@ -137,9 +137,12 @@ if "clicked" in st.session_state:
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        with st.spinner("🔍 Buscando información..."):
-            respuesta = responder(prompt)
-        st.markdown(respuesta)
+        placeholder = st.empty()
+        respuesta = ""
+        for token in responder(prompt):
+            respuesta += token
+            placeholder.markdown(respuesta + "▌")
+        placeholder.markdown(respuesta)
     st.session_state.messages.append({"role": "assistant", "content": respuesta})
     st.rerun()
 
@@ -148,8 +151,11 @@ if prompt := st.chat_input("Escribe tu pregunta sobre Lumetra..."):
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        with st.spinner("🔍 Buscando información..."):
-            respuesta = responder(prompt)
-        st.markdown(respuesta)
+        placeholder = st.empty()
+        respuesta = ""
+        for token in responder(prompt):
+            respuesta += token
+            placeholder.markdown(respuesta + "▌")
+        placeholder.markdown(respuesta)
     st.session_state.messages.append({"role": "assistant", "content": respuesta})
     st.rerun()
